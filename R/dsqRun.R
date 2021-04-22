@@ -12,7 +12,7 @@ dsqRun <- function (domain, query_name, db_connection, input = NULL, async = TRU
   if (is.null(datasources)) {
     datasources <- datashield.connections_find()
   }
-  expr <- list(as.symbol('execQuery'), domain, query_name, dsSwissKnifeClient::.encode.arg(input), db_connection)
+  expr <- list(as.symbol('execQuery'), domain, query_name, dsSwissKnifeClient:::.encode.arg(input), db_connection)
   
   datashield.aggregate(datasources,as.call(expr), async=async)
   

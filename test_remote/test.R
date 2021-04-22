@@ -1,0 +1,7 @@
+devtools::load_all()
+builder <- newDSLoginBuilder()
+builder$append(server="server1", url='https://localhost:7843', user='administrator', password= 'password', driver = "OpalDriver", options="list(ssl_verifyhost=0,ssl_verifypeer=0)")
+logindata <- builder$build()
+opals <<- datashield.login(logins = logindata)
+datashield.assign.resource(opals, 'db', 'omop_test.db')
+x <- dsqShowQueries()
