@@ -8,7 +8,9 @@
 #' @param datasources same as in datashield.assign
 #' @return a list containing all the available queries with documentation
 #' @export
-dsqRun <- function (domain, query_name, db_connection, input = NULL, async = TRUE, datasources = NULL){
+dsqRun <- function (domain = NULL, query_name = NULL, input = NULL, db_connection = NULL, async = TRUE, datasources = NULL){
+ 
+  
   if (is.null(datasources)) {
     datasources <- datashield.connections_find()
   }

@@ -1,7 +1,12 @@
 devtools::load_all()
+library(dsSwissKnifeClient)
 builder <- newDSLoginBuilder()
 builder$append(server="server1", url='https://localhost:7843', user='administrator', password= 'password', driver = "OpalDriver", options="list(ssl_verifyhost=0,ssl_verifypeer=0)")
 logindata <- builder$build()
 opals <<- datashield.login(logins = logindata)
 datashield.assign.resource(opals, 'db', 'omop_test.db')
 x <- dsqShowQueries()
+dssSetOption(list('cdm_schema' = 'synthea_omop'))
+y <- dsqRun('person', 'PE02..Number.of.patients.of.specific.gender.in.the.dataset', db_connection='db', input=8532)
+y <- dsqRun('person', 'PE02', db_connection='db', input=8532)
+dsqRun
