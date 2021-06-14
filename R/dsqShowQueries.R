@@ -15,7 +15,7 @@ dsqShowQueries <- function (queryList = NULL, domain = NULL, query_name = NULL, 
     queryList <- datashield.aggregate(datasources[1], as.symbol(myexpr), async = async)[[1]]
     newfunc <- function(force.download = FALSE, domain = NULL, query_name = NULL){
       if(force.download){
-        return(dsQueryLibrary::dsqShowQueries(NULL, async, datasources))
+        return(dsQueryLibrary::dsqShowQueries(NULL,domain=domain, async=async, datasources=datasources))
       } else {
         return(.readQueryList(queryList, domain, query_name))
       }
@@ -27,33 +27,52 @@ dsqShowQueries <- function (queryList = NULL, domain = NULL, query_name = NULL, 
 }
 
 
-.readQueryList <- function(querylist, domain= NULL, query_name = NULL){
+.readQueryList <- function(queryList, domain= NULL, query_name = NULL){
+
   if(is.null(domain)){
-    domain <- select.list(names(queryList), title = 'Query domain')
-    return(.readQueryList(querylist, domain, query_name))
+    domain <- select.list(names(queryList), title = 'Query domain (0 to exit)')
+    if(domain==''){
+      return()
+    }
+    return(.readQueryList(queryList, domain, query_name))
   }
   if(is.null(query_name)){
-    query_name <- select.list(c(names(queryList[[domain]],'Back to domains')), title = 'Available queries') 
-    if(query_name=='Back to domains'){
-      return(.readQueryList(querylist))
+    query_name <- select.list(names(queryList[[domain]]), title = 'Available queries(0 to go back)') 
+    if(query_name==''){
+      return(.readQueryList(queryList))
     } else (
-      return(.readQueryList(querylist, domain, query_name))
+      return(.readQueryList(queryList, domain, query_name))
     )
   }
-  print(querylist[[domain]][[query_name]])
+  
+  #print(queryList[[domain]][[query_name]], quote = FALSE)
+  sapply(names(queryList[[domain]][[query_name]]), function(x){
+    cat(paste0(x, ': '), sep="\n")
+    if(x %in% c('Query', 'Description')){
+      cat(queryList[[domain]][[query_name]][[x]], sep = "\n")
+    } else {
+      print(queryList[[domain]][[query_name]][[x]])
+    }
+    cat("\n")
+  })
   run <-  select.list(c('yes', 'no'), title = 'Do you want to run it on the nodes?')
   if(run=='yes'){
-    datasources <- readline('Please input the opal nodes where you want to execute this query (press return for all): ')
+    datasources <- readline('Please input the opal nodes where you want to execute this query (press return for all):  ')
     if (datasources==''){
       datasources <- NULL
     }
     input <- NULL
     parms <-  queryList[[domain]][[query_name]]$Input
-    if(parms != 'None'){
-      print('This query has the folowing parameters:')
-      print(parms)
-      input <- readline('Please input a vector of values for each parameter in the same order they appear above.')
+    if(!is.vector(parms) || !grepl('none', parms, ignore.case = TRUE)){
+      cat("This query has the folowing parameters:", "\n")
+      print(format(parms))
+
+      input <-unlist(lapply(parms$Parameter, function(x) readline(paste0('Value for "', x, '": '))))
+
     }
     dsqRun(domain,query_name, input, async = TRUE, datasources = datasources )
   }
 }
+
+
+
