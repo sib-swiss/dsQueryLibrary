@@ -4,26 +4,24 @@
 #' @param datasources same as in datashield.assign
 #' @return a list containing all the available queries with documentation
 #' @export
-dsqShowQueries <- function (queryList = NULL, domain = NULL, query_name = NULL, async = TRUE, datasources = NULL){
+dsqShowQueries <- function (force.download = FALSE, domain = NULL, query_name = NULL, async = TRUE, datasources = NULL){
 
-  if(is.null(queryList)){
+  if(force.download || !exists('.queryCache', where = .GlobalEnv)){
     if (is.null(datasources)) {
       datasources <- datashield.connections_find()
     }
     myexpr <- paste0('loadAllQueries()')
     # run only on one datasource:
     queryList <- datashield.aggregate(datasources[1], as.symbol(myexpr), async = async)[[1]]
-    newfunc <- function(force.download = FALSE, domain = NULL, query_name = NULL){
-      if(force.download){
-        return(dsQueryLibrary::dsqShowQueries(NULL,domain=domain, async=async, datasources=datasources))
-      } else {
-        return(.readQueryList(queryList, domain, query_name))
-      }
+    newfunc <- function(domain = NULL, query_name = NULL){
+      return(.readQueryList(queryList, domain, query_name))
     }
-    assign('dsqShowQueries', newfunc, envir = parent.frame())
+    assign('.queryCache', newfunc, envir = parent.frame())
+    return(.readQueryList(queryList, domain, query_name))
+  } else {
+    return(.queryCache(domain, query_name))
   }
-  return(.readQueryList(queryList, domain, query_name))
-
+  
 }
 
 
