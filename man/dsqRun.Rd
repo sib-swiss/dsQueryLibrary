@@ -5,10 +5,10 @@
 \title{Run a OMOP dictionary query}
 \usage{
 dsqRun(
-  domain,
-  query_name,
-  db_connection,
+  domain = NULL,
+  query_name = NULL,
   input = NULL,
+  db_connection = NULL,
   async = TRUE,
   datasources = NULL
 )
@@ -18,9 +18,10 @@ dsqRun(
 
 \item{query_name}{the query name as it appears in the result of dsqShowQueries}
 
-\item{db_connection}{a character, the name of the connection to the database. This must exist in the remote session(s) - it can be created with datashield.assign.resource().}
-
 \item{input}{a list of the form {param_name = param_value} - input parameters for the query, available in the result of dsqShowQueries}
+
+\item{db_connection}{a character, the name of the connection to the database. This must exist in the remote session(s) - it can be created with datashield.assign.resource().
+If no db_connection is provided, the first connection found in the renote session (alphabetically) will be used.}
 
 \item{async}{same as in datashield.assign}
 

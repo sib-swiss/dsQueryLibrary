@@ -1,7 +1,11 @@
 #' @title  Show all available queries 
 #' @description Return all the available queries explained and grouped by domain.
+#' @param force.download a logical, default FALSE. The normal behaviour of this function is to connect to the remote nodes only at the first invocation and cache the results.
+#' All subsequent invocations will only access the cache. To force re-donwload of the queries from the remote nodes set this parameter to TRUE.
+#' @param domain a character, used to restrict the retrieved queries by domain (a list of all available domains is shown when invoking with domain = NULL)
+#' @param query_name a character, restricts  the result to one specific query
 #' @param async same as in datashield.assign
-#' @param datasources same as in datashield.assign
+#' @param datasources same as in datashield.assign. Unlike in datashield.assign, only the first datasource will be used (as the queries are the same on all nodes).
 #' @return a list containing all the available queries with documentation
 #' @export
 dsqShowQueries <- function (force.download = FALSE, domain = NULL, query_name = NULL, async = TRUE, datasources = NULL){
