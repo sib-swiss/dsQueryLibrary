@@ -1,5 +1,6 @@
-#' @title Run a OMOP dictionary aggregate query 
-#' @description Run one of the preset queries (previously retrieved with dsqShowQueries)
+#' @title Load the result of an OMOP query in the remobe session(s)
+#' @description Load remotely one of the preset queries (previously retrieved with dsqShowQueries)
+#' @param symbol a character, the name of the dataframe where the resultset will be loaded. It defaults to the query_name.
 #' @param domain a character, the query domain (ex. 'care_site')
 #' @param query_name the query name as it appears in the result of dsqShowQueries
 #' @param input a list of the form {param_name = param_value} - input parameters for the query, available in the result of dsqShowQueries
@@ -9,7 +10,7 @@
 #' @param datasources same as in datashield.assign
 #' @return the query result
 #' @export
-dsqRun <- function (domain = NULL, query_name = NULL, input = NULL, db_connection = NULL, async = TRUE, datasources = NULL){
+dsqLoad <- function (symbol = NULL, domain = NULL, query_name = NULL, input = NULL, db_connection = NULL, async = TRUE, datasources = NULL){
  
   
   if (is.null(datasources)) {

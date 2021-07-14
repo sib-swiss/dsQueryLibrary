@@ -6,6 +6,7 @@
 \usage{
 dsqShowQueries(
   force.download = FALSE,
+  query_type = c("Assign", "Aggregate"),
   domain = NULL,
   query_name = NULL,
   async = TRUE,
@@ -15,6 +16,10 @@ dsqShowQueries(
 \arguments{
 \item{force.download}{a logical, default FALSE. The normal behaviour of this function is to connect to the remote nodes only at the first invocation and cache the results.
 All subsequent invocations will only access the cache. To force re-donwload of the queries from the remote nodes set this parameter to TRUE.}
+
+\item{query_type}{a character, one of "Assign" or "Aggregate".  Assign: queries whose results cannot be retrieved due to disclosure controls.
+Their results are loaded in the remote session(s) and made availablle for further processing. Aggregate: queries that retrieve aggregate data, their 
+results are directly returned to the caller.}
 
 \item{domain}{a character, used to restrict the retrieved queries by domain (a list of all available domains is shown when invoking with domain = NULL)}
 
