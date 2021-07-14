@@ -33,31 +33,39 @@ dsqShowQueries <- function (force.download = FALSE, query_type = c("Assign", "Ag
 
 
 .readQueryList <- function(qType, queryList, domain= NULL, query_name = NULL){
+  print(qType)
+  if(is.null(qType) || length(qType) > 1){
+    qType <- select.list(names(queryList), title = 'Assign for loading in the remote sessions; Aggregate for returning results')
+    if(qType==''){
+      return()
+    }
 
+    return(.readQueryList(qType, queryList, domain, query_name))
+  }
   
   if(is.null(domain)){
-    domain <- select.list(names(queryList), title = 'Query domain (0 to exit)')
+    domain <- select.list(names(queryList[[qType]]), title = 'Query domain (0 to exit)')
     if(domain==''){
       return()
     }
-    return(.readQueryList(queryList, domain, query_name))
+    return(.readQueryList(qType, queryList, domain, query_name))
   }
   if(is.null(query_name)){
-    query_name <- select.list(names(queryList[[domain]]), title = 'Available queries(0 to go back)') 
+    query_name <- select.list(names(queryList[[qType]][[domain]]), title = 'Available queries(0 to go back)') 
     if(query_name==''){
-      return(.readQueryList(queryList))
+      return(.readQueryList(qType,queryList))
     } else (
-      return(.readQueryList(queryList, domain, query_name))
+      return(.readQueryList(qType, queryList, domain, query_name))
     )
   }
   
   #print(queryList[[domain]][[query_name]], quote = FALSE)
-  sapply(names(queryList[[domain]][[query_name]]), function(x){
+  sapply(names(queryList[[qType]][[domain]][[query_name]]), function(x){
     cat(paste0(x, ': '), sep="\n")
     if(x %in% c('Query', 'Description')){
-      cat(queryList[[domain]][[query_name]][[x]], sep = "\n")
+      cat(queryList[[qType]][[domain]][[query_name]][[x]], sep = "\n")
     } else {
-      print(queryList[[domain]][[query_name]][[x]])
+      print(queryList[[qType]][[domain]][[query_name]][[x]])
     }
     cat("\n")
   })
@@ -68,7 +76,7 @@ dsqShowQueries <- function (force.download = FALSE, query_type = c("Assign", "Ag
       datasources <- NULL
     }
     input <- NULL
-    parms <-  queryList[[domain]][[query_name]]$Input
+    parms <-  queryList[[qType]][[domain]][[query_name]]$Input
     if(!is.vector(parms) || !grepl('none', parms, ignore.case = TRUE)){
       cat("This query has the folowing parameters:", "\n")
       print(format(parms))
@@ -76,7 +84,11 @@ dsqShowQueries <- function (force.download = FALSE, query_type = c("Assign", "Ag
       input <-unlist(lapply(parms$Parameter, function(x) readline(paste0('Value for "', x, '": '))))
 
     }
-    dsqRun(domain,query_name, input, async = TRUE, datasources = datasources )
+    if(qType == 'Aggregate'){
+      dsqRun(domain,query_name, input, async = TRUE, datasources = datasources )
+    } else if(qType == 'Assign'){
+      dsqLoad(NULL, domain,query_name, input, async = TRUE, datasources = datasources )
+    }
   }
 }
 
