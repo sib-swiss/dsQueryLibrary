@@ -3,6 +3,7 @@ devtools::load_all()
 library(dsSwissKnifeClient)
 builder <- newDSLoginBuilder()
 builder$append(server="server1", url='https://localhost:7843', user='guest', password= 'guest123', driver = "OpalDriver", options="list(ssl_verifyhost=0,ssl_verifypeer=0)")
+builder$append(server="server2", url='https://localhost:8843', user='guest', password= 'guest123', driver = "OpalDriver", options="list(ssl_verifyhost=0,ssl_verifypeer=0)")
 #builder$append(server="server2", url='http://192.168.254.129:8080/', user='administrator', password= 'password', driver = "OpalDriver", options="list(ssl_verifyhost=0,ssl_verifypeer=0)")
 
 #builder$append(server="server1", url='https://sophia-fdb.vital-it.ch/colaus', user='idragan', password= '3xC@libur', driver = "OpalDriver", options="list(ssl_verifyhost=0,ssl_verifypeer=0)")

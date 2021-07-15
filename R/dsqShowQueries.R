@@ -20,11 +20,11 @@ dsqShowQueries <- function (force.download = FALSE, query_type = c("Assign", "Ag
     myexpr <- paste0('loadAllQueries()')
     # run only on one datasource:
     queryList <- datashield.aggregate(datasources[1], as.symbol(myexpr), async = async)[[1]]
-    newfunc <- function(query_type = c("Assign", "Aggregate"), domain = NULL, query_name = NULL){
-      return(.readQueryList(query_type,queryList, domain, query_name))
+    newfunc <- function(query_type = c("Assign", "Aggregate"), domain = NULL, query_name = NULL, datasources = NULL){
+      return(.readQueryList(query_type,queryList, domain, query_name, datasources))
     }
     assign('.queryCache', newfunc, envir = parent.frame())
-    return(.readQueryList(query_type, queryList, domain, query_name))
+    return(.readQueryList(query_type, queryList, domain, query_name, datasources))
   } else {
     return(.queryCache(query_type, domain, query_name))
   }
@@ -32,7 +32,7 @@ dsqShowQueries <- function (force.download = FALSE, query_type = c("Assign", "Ag
 }
 
 
-.readQueryList <- function(qType, queryList, domain= NULL, query_name = NULL){
+.readQueryList <- function(qType, queryList, domain= NULL, query_name = NULL, datasources = NULL){
   print(qType)
   if(is.null(qType) || length(qType) > 1){
     qType <- select.list(names(queryList), title = 'Assign for loading in the remote sessions; Aggregate for returning results')
@@ -71,10 +71,13 @@ dsqShowQueries <- function (force.download = FALSE, query_type = c("Assign", "Ag
   })
   run <-  select.list(c('yes', 'no'), title = 'Do you want to run it on the nodes?')
   if(run=='yes'){
-    datasources <- readline('Please input the opal nodes where you want to execute this query (press return for all):  ')
-    if (datasources==''){
-      datasources <- NULL
+    if (is.null(datasources)) {
+      datasources <- datashield.connections_find()
     }
+    nodes <- select.list(names(datasources), multiple = TRUE, title = 'Please input the opal nodes where you want to execute this query (press return for all):  ')
+
+    datasources <- datasources[nodes]
+    
     input <- NULL
     parms <-  queryList[[qType]][[domain]][[query_name]]$Input
     if(!is.vector(parms) || !grepl('none', parms, ignore.case = TRUE)){
