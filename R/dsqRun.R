@@ -2,7 +2,7 @@
 #' @description Run one of the preset queries (previously retrieved with dsqShowQueries)
 #' @param domain a character, the query domain (ex. 'care_site')
 #' @param query_name the query name as it appears in the result of dsqShowQueries
-#' @param input a list of the form {param_name = param_value} - input parameters for the query, available in the result of dsqShowQueries
+#' @param input a vector of input parameters, in the same order as they appear in the text of the query. Information is available in dsqShowQueries() for each case.
 #' @param db_connection a character, the name of the connection to the database. This must exist in the remote session(s) - it can be created with datashield.assign.resource().
 #' If no db_connection is provided, the first connection found in the renote session (alphabetically) will be used.
 #' @param async same as in datashield.assign

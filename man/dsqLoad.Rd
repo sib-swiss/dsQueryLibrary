@@ -8,7 +8,8 @@ dsqLoad(
   symbol = NULL,
   domain = NULL,
   query_name = NULL,
-  input = NULL,
+  where_clause = NULL,
+  row_limit = NULL,
   db_connection = NULL,
   async = TRUE,
   datasources = NULL
@@ -21,7 +22,9 @@ dsqLoad(
 
 \item{query_name}{the query name as it appears in the result of dsqShowQueries}
 
-\item{input}{a list of the form {param_name = param_value} - input parameters for the query, available in the result of dsqShowQueries}
+\item{where_clause}{an optional where clause that can be appended to the query (without the 'where' keyword)}
+
+\item{row_limit}{maximum number of row retrieved}
 
 \item{db_connection}{a character, the name of the connection to the database. This must exist in the remote session(s) - it can be created with datashield.assign.resource().
 If no db_connection is provided, the first connection found in the renote session (alphabetically) will be used.}
