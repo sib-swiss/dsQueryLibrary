@@ -74,7 +74,7 @@ dsqShowQueries <- function (force.download = FALSE, query_type = c("Assign", "Ag
     if (is.null(datasources)) {
       datasources <- datashield.connections_find()
     }
-    nodes <- select.list(names(datasources), multiple = TRUE, title = 'Please input the opal nodes where you want to execute this query (press return for all):  ')
+    nodes <- select.list(names(datasources), multiple = TRUE, title = 'Please input the opal nodes where you want to execute this query:  ')
 
     datasources <- datasources[nodes]
     
