@@ -33,7 +33,7 @@ dsqShowQueries <- function (force.download = FALSE, query_type = c("Assign", "Ag
 
 
 .readQueryList <- function(qType, queryList, domain= NULL, query_name = NULL, datasources = NULL){
-  print(qType)
+
   if(is.null(qType) || length(qType) > 1){
     qType <- select.list(names(queryList), title = 'Assign for loading in the remote sessions; Aggregate for returning results')
     if(qType==''){
@@ -90,7 +90,11 @@ dsqShowQueries <- function (force.download = FALSE, query_type = c("Assign", "Ag
     if(qType == 'Aggregate'){
       dsqRun(domain,query_name, input, async = TRUE, datasources = datasources )
     } else if(qType == 'Assign'){
-      dsqLoad(NULL, domain,query_name, input, async = TRUE, datasources = datasources )
+      lim <- readline('Please enter the desired row limit here (press return for all rows):')
+      if(lim == ''){
+        lim <- NULL
+      }
+      dsqLoad(NULL, domain,query_name, input, lim, async = TRUE, datasources = datasources )
     }
   }
 }
