@@ -21,6 +21,9 @@ dsqLoad <- function (symbol = NULL, domain = NULL, query_name = NULL, where_clau
   if (is.null(datasources)) {
     datasources <- datashield.connections_find()
   }
+  if (!is.null(db_connections)){
+    db_connections <- dsSwissKnifeClient:::.encode.arg(db_connections)
+  }
   expr <- list(as.symbol('execQuery'),  domain, query_name, NULL, symbol, dsSwissKnifeClient:::.encode.arg(where_clause), row_limit, db_connections, union)
   datashield.aggregate(datasources,as.call(expr), async=async)
   

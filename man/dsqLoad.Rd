@@ -10,13 +10,14 @@ dsqLoad(
   query_name = NULL,
   where_clause = NULL,
   row_limit = NULL,
-  db_connection = NULL,
+  db_connections = NULL,
+  union = TRUE,
   async = TRUE,
   datasources = NULL
 )
 }
 \arguments{
-\item{symbol}{a character, the name of the dataframe where the resultset will be loaded. It defaults to the query_name.}
+\item{symbol}{a character, the name of the data frame where the resultset will be loaded. It defaults to the query_name.}
 
 \item{domain}{a character, the query domain (ex. 'care_site')}
 
@@ -26,8 +27,13 @@ dsqLoad(
 
 \item{row_limit}{maximum number of row retrieved}
 
-\item{db_connection}{a character, the name of the connection to the database. This must exist in the remote session(s) - it can be created with datashield.assign.resource().
-If no db_connection is provided, the first connection found in the renote session (alphabetically) will be used.}
+\item{db_connections}{a vector, the name of the connection(s) to the database. They must exist in the remote session(s) - it can be created with datashield.assign.resource().
+If no db_connection is provided, all the connections found in the renote session will be used. One more column called "database"
+will be added to the query results and it will be populated with the respective connection names. The next argument (union)
+will goevern further behaviour.}
+
+\item{union}{a logical, if TRUE (the default), the resultsets across the multiple connections will be concatenated in one single data frame.
+If FALSE, one data frame will be created for each connection (with the connection name concatenated to the original name)}
 
 \item{async}{same as in datashield.assign}
 
