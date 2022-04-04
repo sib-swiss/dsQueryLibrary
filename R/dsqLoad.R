@@ -15,7 +15,7 @@
 #' @param datasources same as in datashield.assign
 #' @return the query result
 #' @export
-dsqLoad <- function (symbol = NULL, domain = NULL, query_name = NULL, where_clause = NULL, row_limit = NULL, row_offset = NULL, db_connections = NULL, union = TRUE, async = TRUE, datasources = NULL){
+dsqLoad <- function (symbol = NULL, domain = NULL, query_name = NULL, where_clause = NULL, row_limit = NULL, row_offset = 0, db_connections = NULL, union = TRUE, async = TRUE, datasources = NULL){
  
   if (is.null(datasources)) {
     datasources <- datashield.connections_find()
