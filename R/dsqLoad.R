@@ -15,16 +15,16 @@
 #' @param datasources same as in datashield.assign
 #' @return the query result
 #' @export
-dsqLoad <- function (symbol = NULL, domain = NULL, query_name = NULL, where_clause = NULL, row_limit = NULL, db_connections = NULL, union = TRUE, async = TRUE, datasources = NULL){
+dsqLoad <- function (symbol = NULL, domain = NULL, query_name = NULL, where_clause = NULL, row_limit = NULL, row_offset = NULL, db_connections = NULL, union = TRUE, async = TRUE, datasources = NULL){
  
-  
   if (is.null(datasources)) {
     datasources <- datashield.connections_find()
   }
   if (!is.null(db_connections)){
     db_connections <- dsSwissKnifeClient:::.encode.arg(db_connections)
   }
-  expr <- list(as.symbol('execQuery'),  domain, query_name, NULL, symbol, dsSwissKnifeClient:::.encode.arg(where_clause), row_limit, db_connections, union)
+  
+  expr <- list(as.symbol('execQuery'),  domain, query_name, NULL, symbol, dsSwissKnifeClient:::.encode.arg(where_clause), row_limit, row_offset, db_connections, union)
   datashield.aggregate(datasources,as.call(expr), async=async)
   
 }
