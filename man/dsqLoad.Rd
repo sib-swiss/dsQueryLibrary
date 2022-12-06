@@ -2,7 +2,7 @@
 % Please edit documentation in R/dsqLoad.R
 \name{dsqLoad}
 \alias{dsqLoad}
-\title{Load the result of an OMOP query in the remobe session(s)}
+\title{Load the result of an OMOP query in the remote session(s)}
 \usage{
 dsqLoad(
   symbol = NULL,
@@ -10,8 +10,10 @@ dsqLoad(
   query_name = NULL,
   where_clause = NULL,
   row_limit = NULL,
+  row_offset = 0,
   db_connections = NULL,
   union = TRUE,
+  exclude_cols_regex = c("source"),
   async = TRUE,
   datasources = NULL
 )
@@ -32,7 +34,10 @@ If no db_connection is provided, all the connections found in the renote session
 will be added to the query results and it will be populated with the respective connection names. The next argument (union)
 will goevern further behaviour.}
 
-\item{union}{a logical, if TRUE (the default), the resultsets across the multiple connections will be concatenated in one single data frame.
+\item{union}{a logical, if TRUE (the default), the result sets across the multiple connections will be concatenated in one single data frame.
+If FALSE, one data frame will be created for each connection (with the connection name concatenated to the original name)}
+
+\item{exclude_cols_regex, }{a vector of regular expressions used to filter out certain columns from the result. By default it filters out the columns containting 'source' in their name.
 If FALSE, one data frame will be created for each connection (with the connection name concatenated to the original name)}
 
 \item{async}{same as in datashield.assign}
