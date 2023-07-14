@@ -94,7 +94,7 @@ dsqShowQueries <- function (force.download = FALSE, query_type = c("Assign", "Ag
       if(lim == ''){
         lim <- NULL
       }
-      dsqLoad(NULL, domain,query_name, input, lim, async = TRUE, datasources = datasources )
+      dsqLoad(NULL, domain,query_name, input,NULL, lim, async = TRUE, datasources = datasources )
     }
   }
 }
