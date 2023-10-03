@@ -3,6 +3,7 @@
 #' @param symbol a character, the name of the data frame where the resultset will be loaded. It defaults to the query_name.
 #' @param domain a character, the query domain (ex. 'care_site')
 #' @param query_name the query name as it appears in the result of dsqShowQueries
+#' #' @param input a vector of input parameters, in the same order as they appear in the text of the query. Information is available in dsqShowQueries() for each case.
 #' @param where_clause an optional where clause that can be appended to the query (without the 'where' keyword)
 #' @param row_limit maximum number of row retrieved
 #' @param db_connections a vector, the name of the connection(s) to the database. They must exist in the remote session(s) - it can be created with datashield.assign.resource().
@@ -17,7 +18,7 @@
 #' @param datasources same as in datashield.assign
 #' @return the query result
 #' @export
-dsqLoad <- function (symbol = NULL, domain = NULL, query_name = NULL, where_clause = NULL, row_limit = NULL, row_offset = 0, db_connections = NULL, union = TRUE, exclude_cols_regex = c('source'), async = TRUE, datasources = NULL){
+dsqLoad <- function (symbol = NULL, domain = NULL, query_name = NULL, input = NULL, where_clause = NULL, row_limit = NULL, row_offset = 0, db_connections = NULL, union = TRUE, exclude_cols_regex = c('source'), async = TRUE, datasources = NULL){
  
   if (is.null(datasources)) {
     datasources <- datashield.connections_find()
@@ -26,7 +27,7 @@ dsqLoad <- function (symbol = NULL, domain = NULL, query_name = NULL, where_clau
     db_connections <- dsSwissKnifeClient:::.encode.arg(db_connections)
   }
   
-  expr <- list(as.symbol('execQuery'),  domain, query_name, NULL, symbol, dsSwissKnifeClient:::.encode.arg(where_clause), row_limit, row_offset, db_connections, union, exclude_cols_regex)
+  expr <- list(as.symbol('execQuery'),  domain, query_name, dsSwissKnifeClient:::.encode.arg(input), symbol, dsSwissKnifeClient:::.encode.arg(where_clause), row_limit, row_offset, db_connections, union, exclude_cols_regex)
   datashield.aggregate(datasources,as.call(expr), async=async)
   
 }
