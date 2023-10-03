@@ -3,7 +3,7 @@
 #' @param symbol a character, the name of the data frame where the resultset will be loaded. It defaults to the query_name.
 #' @param domain a character, the query domain (ex. 'care_site')
 #' @param query_name the query name as it appears in the result of dsqShowQueries
-#' #' @param input a vector of input parameters, in the same order as they appear in the text of the query. Information is available in dsqShowQueries() for each case.
+#' @param input a vector of input parameters, in the same order as they appear in the text of the query. Information is available in dsqShowQueries() for each case.
 #' @param where_clause an optional where clause that can be appended to the query (without the 'where' keyword)
 #' @param row_limit maximum number of row retrieved
 #' @param db_connections a vector, the name of the connection(s) to the database. They must exist in the remote session(s) - it can be created with datashield.assign.resource().

@@ -8,6 +8,7 @@ dsqLoad(
   symbol = NULL,
   domain = NULL,
   query_name = NULL,
+  input = NULL,
   where_clause = NULL,
   row_limit = NULL,
   row_offset = 0,
@@ -24,6 +25,8 @@ dsqLoad(
 \item{domain}{a character, the query domain (ex. 'care_site')}
 
 \item{query_name}{the query name as it appears in the result of dsqShowQueries}
+
+\item{input}{a vector of input parameters, in the same order as they appear in the text of the query. Information is available in dsqShowQueries() for each case.}
 
 \item{where_clause}{an optional where clause that can be appended to the query (without the 'where' keyword)}
 
